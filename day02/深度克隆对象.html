@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let arr = [1,{"2":2},[3]]
+        function deepCopy(obj) {
+            let newObj = Array.isArray(obj) ? [] : {};
+            if (obj && typeof obj === "object") {
+                for (let key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        newObj[key] = (obj && typeof obj[key] === 'object') ? deepCopy(obj[key]) : obj[key];
+                    }
+                }
+            }
+            return newObj;
+        }
+        let arr2 = deepCopy(arr)
+        arr2[1] = 4;
+        console.log(arr,"arr");
+        console.log(arr2,"arr2");
+    </script>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滑动验证</title>
+    <style>
+        html,
+        body,
+        ul,
+        ol,
+        p {
+            margin: 0;
+            padding: 0;
+        }
+        ul,
+        ol {
+            list-style: none;
+        }
+        .clearfix::after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+        .wrapper {
+            width: 500px;
+            height: 350px;
+            border: 1px solid #ccc;
+            margin: 0 auto;
+            user-select: none;
+            position: relative;
+        }
+        h1 {
+            text-align: center;
+            margin: 10px 0;
+        }
+        ul li {
+            height: 50px;
+            margin: 10px 0;
+            padding: 0 118px;
+        }
+        ul li span {
+            display: block;
+            float: left;
+            height: 44px;
+            text-align: center;
+            line-height: 44px;
+        }
+        ul li input {
+            width: 200px;
+            height: 36px;
+            display: block;
+            margin: 0 auto;
+            outline: none;
+            padding: 2px 5px;
+            float: right;
+        }
+        ul li button {
+            font-size: 20px;
+            display: block;
+            margin: 0 auto;
+            height: 40px;
+            width: 260px;
+            outline: none;
+            cursor: pointer;
+        }
+        /* .boxImg{
+            position: absolute;
+            top: 0px;
+        } */
+        ol li:nth-child(1) {
+            position: relative;
+            width: 500px;
+            height: 300px;
+        }
+        img {
+            display: block;
+            width: 500px;
+            height: 300px;
+        }
+        .empty {
+            width: 50px;
+            height: 50px;
+            background-color: #fff;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+        .img {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            /* background-color: red; */
+            top: 0px;
+            left: 0px;
+            background-image: url("./images/1.jpg");
+            /* background-size: cover; */
+            /* background-repeat: no-repeat; */
+            background-size: 500px 300px;
+            background-position: 0px 0px;
+        }
+        .bigBox {
+            width: 500px;
+            height: 50px;
+            font-size: 20px;
+            line-height: 50px;
+            text-align: center;
+            position: relative;
+            background-color: #ccc;
+        }
+        .smallBox {
+            width: 50px;
+            height: 50px;
+            /* border: 1px solid #ccc; */
+            font-size: 20px;
+            line-height: 50px;
+            text-align: center;
+            border-radius: 5px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            cursor: pointer;
+            z-index: 3;
+            background-color: #fff;
+        }
+        .smallBox:hover {
+            background-color: skyblue;
+        }
+        p {
+            position: absolute;
+            top: 0;
+            width: 500px;
+            display: block;
+            z-index: 2;
+        }
+        .bg {
+            width: 0px;
+            height: 50px;
+            position: absolute;
+            background-color: green;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="login">
+            <h1>用户登录</h1>
+            <ul class=".clearfix">
+                <li>
+                    <span>账户：</span>
+                    <input id="inp1" type="text" placeholder="请输入账号">
+                </li>
+                <li>
+                    <span>密码：</span>
+                    <input id="inp2" type="text" placeholder="请输入密码">
+                </li>
+                <li>
+                    <button id="btn">点击验证</button>
+                </li>
+                <li>
+                    <button id="loginBtn">登录</button>
+                </li>
+            </ul>
+        </div>
+        <div class="boxImg">
+            <ol>
+                <li>
+                    <img src="./images/1.jpg" alt="">
+                    <div class="empty"></div>
+                    <div class="img"></div>
+                </li>
+                <li>
+                    <div class="bigBox">
+                        <div class="smallBox">>></div>
+                        <p class="text">向右拖动滑块填充拼图</p>
+                        <div class="bg"></div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <script>
+        var smallBox = document.getElementsByClassName("smallBox")[0];
+        var bigBox = document.getElementsByClassName("bigBox")[0];
+        var bg = document.getElementsByClassName("bg")[0];
+        var text = document.getElementsByClassName("text")[0];
+        var empty = document.getElementsByClassName("empty")[0];
+        var img = document.getElementsByClassName("img")[0];
+        var boxImg = document.getElementsByClassName("boxImg")[0];
+        var login = document.getElementsByClassName("login")[0];
+        var btn = document.getElementById("btn");
+        var bool = false;
+
+        var inp1 = document.getElementById("inp1");
+        var inp2 = document.getElementById("inp2");
+        var loginBtn = document.getElementById("loginBtn");
+        function random(max, min) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+        var x = random(450, 250);
+        var y = random(250, 0);
+        var moveX = 0;
+        var width = bigBox.offsetWidth - smallBox.offsetWidth;
+        function xy(x,y){
+            empty.style.left = x + "px";
+            empty.style.top = y + "px";
+            img.style.top = y + "px";
+            img.style.backgroundPositionX = -x + "px";
+            img.style.backgroundPositionY = -y + "px";
+        }
+        xy(x,y);
+        boxImg.style.display = "none";
+        loginBtn.onclick = function(){
+            alert("你还没验证");
+        }
+        btn.onclick = function () {
+            login.style.display = "none";
+            boxImg.style.display = "block";
+            btn.onclick = null;
+            loginBtn.onclick = function(){
+                var v1 = inp1.value;
+                var v2 = inp2.value;
+                var r1 = /^1[3-9]\d{9}$/.test(v1);
+                var r2 = /^\d{10}@qq.com$/.test(v2);
+                console.log(v1,v2);
+                if(r1 == true && r1 != null){
+                    if(r2 == true && r2 != null){
+                        alert("验证成功");
+                    }else{
+                        alert("密码错误");
+                    }
+                }else{
+                    alert("账号错误");
+                }
+            }
+        }
+        smallBox.onmousedown = function (e) {
+            // smallBox.onmousedown = null;
+            bool = true;
+            console.log("onmousedown");
+            console.log(e,"e");
+            startX = e.pageX;
+            console.log(startX,"startX");
+            return false;
+        }
+        smallBox.onmousemove = function (e) {
+            // console.log(bool,"2");
+            console.log("onmousemove");
+            if (bool) {
+                moveX = e.pageX - startX;
+                console.log(moveX,"moveX");
+                moveX = moveX > width ? width : moveX;
+                if (moveX > 0) {
+                    this.style.left = moveX + "px";
+                    bg.style.width = moveX + "px";
+                    img.style.left = moveX + "px";
+                }
+            }
+        }
+        smallBox.onmouseup = function () {
+            // smallBox.onmousemove = null;
+            console.log("onmouseup");
+            bool = false
+            // console.log(moveX);
+            if (moveX + 5 >= x && moveX - 5 <= x) {
+                bool = true;
+                text.innerHTML = "验证成功";
+                text.style.color = "#fff";
+                smallBox.style.left = moveX + "px";
+                bg.style.width = moveX + "px";
+                img.style.left = moveX + "px";
+                smallBox.onmousedown = null;
+                smallBox.onmousemove = null;
+                var timer = setTimeout(() => {
+                    boxImg.style.display = "none";
+                    login.style.display = "block";
+                }, 1000);
+            } else {
+                x = random(450, 250);
+                y = random(250, 0);
+                xy(x,y);
+                // console.log(x,y,"2");
+                this.style.left = 0;
+                bg.style.width = 0;
+                img.style.left = 0;
+                // console.log(this);
+            }
+            return false;
+        } 
+    </script>
+</body>
+</html>

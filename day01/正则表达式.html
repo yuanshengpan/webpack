@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正则表达式</title>
+</head>
+<body>
+    <script>
+        var r = /^[A-Z]((\d|\W|\w|[a-zA-Z]){5,29}$)/;
+        console.log(r.test("A12a30111/11111111111A"));
+    </script>
+</body>
+</html>
